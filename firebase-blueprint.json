@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and sync preferences",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "pushEnabled": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "email"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Productivity categories such as ENT, EPS, BIDA, COD, MEN, SPORT",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 80 },
+        "type": { "type": "string", "maxLength": 50 },
+        "color": { "type": "string", "maxLength": 30 },
+        "icon": { "type": "string", "maxLength": 50 },
+        "monthlyTarget": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "name", "type", "color", "icon"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "Habit, Reminder, or Goal item tracked on calendar, kanban, or list view",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "categoryId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 160 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "itemType": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "maxLength": 30 },
+        "priority": { "type": "string", "maxLength": 20 },
+        "dueDate": { "type": "string", "maxLength": 40 },
+        "dueTime": { "type": "string", "maxLength": 20 },
+        "frequency": { "type": "string", "maxLength": 30 },
+        "targetValue": { "type": "number" },
+        "currentValue": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 30 },
+        "reminderEnabled": { "type": "boolean" },
+        "streakCount": { "type": "number" },
+        "bestStreak": { "type": "number" },
+        "completed": { "type": "boolean" },
+        "completedAt": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "categoryId", "title", "itemType", "status"]
+    },
+    "HabitLog": {
+      "title": "HabitLog",
+      "description": "Daily habit completion records and streak metrics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "taskId": { "type": "string", "maxLength": 128 },
+        "categoryId": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 20 },
+        "completed": { "type": "boolean" },
+        "value": { "type": "number" },
+        "note": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "taskId", "date", "completed"]
+    },
+    "ProgressMetric": {
+      "title": "ProgressMetric",
+      "description": "Progress entries for charts and monthly statistics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "categoryId": { "type": "string", "maxLength": 128 },
+        "taskId": { "type": "string", "maxLength": 128 },
+        "metricType": { "type": "string", "maxLength": 40 },
+        "date": { "type": "string", "maxLength": 20 },
+        "value": { "type": "number" },
+        "note": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "categoryId", "date", "value"]
+    },
+    "MentalCheckIn": {
+      "title": "MentalCheckIn",
+      "description": "CBT Mental Wellbeing Thought Record and Emotional Distortion checks",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string", "maxLength": 20 },
+        "situation": { "type": "string", "maxLength": 1000 },
+        "emotion": { "type": "string", "maxLength": 200 },
+        "voteBefore": { "type": "number" },
+        "distortion1": { "type": "string", "maxLength": 100 },
+        "distortion2": { "type": "string", "maxLength": 100 },
+        "distortion3": { "type": "string", "maxLength": 100 },
+        "afterThought": { "type": "string", "maxLength": 1000 },
+        "voteAfter": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "date", "situation", "emotion", "voteAfter"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Private user profile and notification preferences"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "User productivity categories with custom targets and styles"
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "User habits, reminders, and goals"
+    },
+    "/habitLogs/{logId}": {
+      "schema": "HabitLog",
+      "description": "Daily habit logs for monthly calendar and completion statistics"
+    },
+    "/progressMetrics/{metricId}": {
+      "schema": "ProgressMetric",
+      "description": "Statistical tracking data points for charts and monthly progress"
+    },
+    "/mentalCheckIns/{checkInId}": {
+      "schema": "MentalCheckIn",
+      "description": "CBT Mental Wellbeing Thought Records and Distortion checks"
+    }
+  }
+}

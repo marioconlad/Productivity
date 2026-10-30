@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-light-lilac: #DCD3F0;
+    --bg-light-blue: #CFE0F5;
+    --bg-light-grey: #E2E4E9;
+    
+    --bg-dark-lilac: #2A2640;
+    --bg-dark-blue: #1E2B40;
+    --bg-dark-grey: #1C1C1E;
+    
+    --apple-blue: #0A84FF;
+    --apple-red: #FF3B30;
+    
+    /* Text variables strictly following specification */
+    --text-primary: #1C1C1E;
+    --text-secondary: #6E6E73;
+    --text-tertiary: #8E8E93;
+    
+    --hairline-light: rgba(60, 60, 67, 0.12);
+    --hairline-dark: rgba(255, 255, 255, 0.12);
+  }
+
+  .dark, html.dark {
+    --text-primary: #F5F5F7;
+    --text-secondary: #A1A1A6;
+    --text-tertiary: #8E8E93;
+  }
+
+  html {
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #CFE0F5;
+    background-image: 
+      radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 55%),
+      linear-gradient(135deg, #DCD3F0 0%, #CFE0F5 50%, #E2E4E9 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: var(--text-primary);
+  }
+
+  .dark body, html.dark body {
+    background-color: #1C1C1E;
+    background-image: 
+      radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 55%),
+      linear-gradient(135deg, #2A2640 0%, #1E2B40 50%, #1C1C1E 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: var(--text-primary);
+  }
+
+  /* Native inputs, selects and options ensure proper contrast in dark mode */
+  input, select, textarea {
+    color: var(--text-primary);
+  }
+  
+  option {
+    background-color: #FFFFFF;
+    color: #1C1C1E;
+  }
+
+  .dark option, html.dark option {
+    background-color: #2C2C2E;
+    color: #F5F5F7;
+  }
+}
+
+/* Apple Checkbox (18px round tactile control) */
+.apple-checkbox {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(60, 60, 67, 0.35);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
+}
+.apple-checkbox:hover {
+  border-color: #0A84FF;
+}
+.dark .apple-checkbox, html.dark .apple-checkbox {
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+}
+.apple-checkbox.checked {
+  background-color: #0A84FF;
+  border-color: #0A84FF;
+  color: #FFFFFF;
+}
+
+/* Apple Dropzone active highlight (full container, inset outline, non-clipped) */
+.apple-drop-active {
+  outline: 2px solid #0A84FF !important;
+  outline-offset: -2px !important;
+  background-color: rgba(10, 132, 255, 0.10) !important;
+}
+
+/* Apple macOS Translucent Panels */
+.apple-panel {
+  background-color: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+}
+.dark .apple-panel, html.dark .apple-panel {
+  background-color: rgba(44, 44, 48, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Apple Inset / Subpanel */
+.apple-subpanel {
+  background-color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(60, 60, 67, 0.12);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+}
+.dark .apple-subpanel, html.dark .apple-subpanel {
+  background-color: rgba(30, 30, 34, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Hairline Dividers */
+.apple-divider {
+  border-color: rgba(60, 60, 67, 0.12);
+}
+.dark .apple-divider, html.dark .apple-divider {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Segmented Pill Navigation */
+.apple-segmented-pill {
+  background-color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+.dark .apple-segmented-pill, html.dark .apple-segmented-pill {
+  background-color: rgba(36, 36, 40, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Apple Minimal Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 128, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 128, 0.45);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

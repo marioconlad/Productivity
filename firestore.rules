@@ -1,0 +1,162 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['id', 'email'])
+        && data.id is string && data.id.size() <= 128
+        && data.email is string && data.email.size() <= 200
+        && (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100))
+        && (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500))
+        && (!('pushEnabled' in data) || data.pushEnabled is bool);
+    }
+
+    function isValidCategory(data) {
+      return data.keys().hasAll(['id', 'userId', 'name', 'type', 'color', 'icon'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 80
+        && data.type is string && data.type.size() <= 50
+        && data.color is string && data.color.size() <= 30
+        && data.icon is string && data.icon.size() <= 50
+        && (!('monthlyTarget' in data) || data.monthlyTarget is number)
+        && (!('unit' in data) || (data.unit is string && data.unit.size() <= 30));
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['id', 'userId', 'categoryId', 'title', 'itemType', 'status'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.categoryId is string && data.categoryId.size() <= 128
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 160
+        && data.itemType is string && data.itemType.size() <= 30
+        && data.status is string && data.status.size() <= 30
+        && (!('description' in data) || (data.description is string && data.description.size() <= 1000))
+        && (!('priority' in data) || (data.priority is string && data.priority.size() <= 20))
+        && (!('dueDate' in data) || (data.dueDate is string && data.dueDate.size() <= 40))
+        && (!('dueTime' in data) || (data.dueTime is string && data.dueTime.size() <= 20))
+        && (!('frequency' in data) || (data.frequency is string && data.frequency.size() <= 30))
+        && (!('targetValue' in data) || data.targetValue is number)
+        && (!('currentValue' in data) || data.currentValue is number)
+        && (!('unit' in data) || (data.unit is string && data.unit.size() <= 30))
+        && (!('reminderEnabled' in data) || data.reminderEnabled is bool)
+        && (!('streakCount' in data) || data.streakCount is number)
+        && (!('bestStreak' in data) || data.bestStreak is number)
+        && (!('completed' in data) || data.completed is bool)
+        && (!('completedAt' in data) || (data.completedAt is string && data.completedAt.size() <= 40))
+        && (!('order' in data) || data.order is number);
+    }
+
+    function isValidHabitLog(data) {
+      return data.keys().hasAll(['id', 'userId', 'taskId', 'date', 'completed'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.taskId is string && data.taskId.size() <= 128
+        && data.date is string && data.date.size() <= 20
+        && data.completed is bool
+        && (!('categoryId' in data) || (data.categoryId is string && data.categoryId.size() <= 128))
+        && (!('value' in data) || data.value is number)
+        && (!('note' in data) || (data.note is string && data.note.size() <= 300));
+    }
+
+    function isValidProgressMetric(data) {
+      return data.keys().hasAll(['id', 'userId', 'categoryId', 'date', 'value'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.categoryId is string && data.categoryId.size() <= 128
+        && data.date is string && data.date.size() <= 20
+        && data.value is number
+        && (!('taskId' in data) || (data.taskId is string && data.taskId.size() <= 128))
+        && (!('metricType' in data) || (data.metricType is string && data.metricType.size() <= 40))
+        && (!('note' in data) || (data.note is string && data.note.size() <= 300));
+    }
+
+    function isValidMentalCheckIn(data) {
+      return data.keys().hasAll(['id', 'userId', 'date', 'situation', 'emotion', 'voteAfter'])
+        && data.id is string && data.id.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && data.date is string && data.date.size() <= 20
+        && data.situation is string && data.situation.size() <= 1000
+        && data.emotion is string && data.emotion.size() <= 200
+        && data.voteAfter is number
+        && (!('voteBefore' in data) || data.voteBefore is number)
+        && (!('distortion1' in data) || (data.distortion1 is string && data.distortion1.size() <= 100))
+        && (!('distortion2' in data) || (data.distortion2 is string && data.distortion2.size() <= 100))
+        && (!('distortion3' in data) || (data.distortion3 is string && data.distortion3.size() <= 100))
+        && (!('afterThought' in data) || (data.afterThought is string && data.afterThought.size() <= 1000));
+    }
+
+    // User profile
+    match /users/{userId} {
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow create, update: if isSignedIn() && request.auth.uid == userId && isValidUser(incoming());
+      allow delete: if false;
+    }
+
+    // Categories
+    match /categories/{categoryId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(categoryId) && incoming().userId == request.auth.uid && isValidCategory(incoming());
+      allow update: if isSignedIn() && isValidId(categoryId) && existing().userId == request.auth.uid && incoming().userId == existing().userId && isValidCategory(incoming());
+      allow delete: if isSignedIn() && isValidId(categoryId) && resource.data.userId == request.auth.uid;
+    }
+
+    // Tasks (Habits, Reminders, Goals)
+    match /tasks/{taskId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(taskId) && incoming().userId == request.auth.uid && isValidTask(incoming());
+      allow update: if isSignedIn() && isValidId(taskId) && existing().userId == request.auth.uid && incoming().userId == existing().userId && isValidTask(incoming());
+      allow delete: if isSignedIn() && isValidId(taskId) && resource.data.userId == request.auth.uid;
+    }
+
+    // Habit Logs
+    match /habitLogs/{logId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(logId) && incoming().userId == request.auth.uid && isValidHabitLog(incoming());
+      allow update: if isSignedIn() && isValidId(logId) && existing().userId == request.auth.uid && incoming().userId == existing().userId && isValidHabitLog(incoming());
+      allow delete: if isSignedIn() && isValidId(logId) && resource.data.userId == request.auth.uid;
+    }
+
+    // Progress Metrics
+    match /progressMetrics/{metricId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(metricId) && incoming().userId == request.auth.uid && isValidProgressMetric(incoming());
+      allow update: if isSignedIn() && isValidId(metricId) && existing().userId == request.auth.uid && incoming().userId == existing().userId && isValidProgressMetric(incoming());
+      allow delete: if isSignedIn() && isValidId(metricId) && resource.data.userId == request.auth.uid;
+    }
+
+    // Mental Wellbeing Check-Ins (CBT Thought Records)
+    match /mentalCheckIns/{checkInId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(checkInId) && incoming().userId == request.auth.uid && isValidMentalCheckIn(incoming());
+      allow update: if isSignedIn() && isValidId(checkInId) && existing().userId == request.auth.uid && incoming().userId == existing().userId && isValidMentalCheckIn(incoming());
+      allow delete: if isSignedIn() && isValidId(checkInId) && resource.data.userId == request.auth.uid;
+    }
+  }
+}

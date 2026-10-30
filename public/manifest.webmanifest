@@ -1,0 +1,27 @@
+{
+  "name": "Tempo - Habits, Reminders & Goals",
+  "short_name": "Tempo",
+  "description": "Apple-inspired productivity app with CBT mental wellbeing checks, reminders, and calendar schedule.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#3B82F6",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

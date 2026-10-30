@@ -1,0 +1,6 @@
+{
+  "name": "Tempo - Habits, Reminders & Goals",
+  "description": "Apple-inspired productivity app featuring calendar, Kanban, and list views with custom categories (money saving, study, fitness), progress charts, push notifications, and cloud sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

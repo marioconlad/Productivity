@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="tempoIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+  </defs>
+  <!-- White rounded square background -->
+  <rect width="512" height="512" rx="112" fill="#FFFFFF" />
+  
+  <!-- Centered gradient circle -->
+  <circle cx="256" cy="256" r="170" fill="url(#tempoIconGrad)" />
+  
+  <!-- Center hub dot -->
+  <circle cx="256" cy="256" r="18" fill="#FFFFFF" />
+  
+  <!-- Shorter hour hand pointing to ~10 o'clock (rounded ends) -->
+  <line x1="256" y1="256" x2="190" y2="175" stroke="#FFFFFF" stroke-width="28" stroke-linecap="round" />
+  
+  <!-- Longer minute hand pointing to ~2 o'clock (rounded ends) -->
+  <line x1="256" y1="256" x2="335" y2="155" stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" />
+</svg>
